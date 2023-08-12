@@ -22,8 +22,6 @@ const Home = () => {
         setError("");
       } else {
         setLoading("");
-        // setError(error.message)
-        // setError(`${searchValue} City Doesn't Exist`);
       }
     }
   };
