@@ -12,12 +12,14 @@ import { useGlobalContext } from "../../Context/useContext";
 const Card = () => {
   const { weatherData } = useGlobalContext();
   const [img, setImg] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+
+ 
 
   useEffect(() => {
-
+    
     if (weatherData) {
-      const id = weatherData?.weather[0]?.id;
+      const id= weatherData?.weather ? weatherData.weather[0]?.id :""
       if (id) {
         if (id >= 200 && id <= 232) {
           setImg(storm);
@@ -33,52 +35,59 @@ const Card = () => {
           setImg(clear);
         }
       }
+    } else {
+      navigate("/")
     }
   }, [weatherData]);
+
 
   const { main, name, sys } = weatherData || {};
   const temperature = Math.floor(Number(main?.temp) - 273);
   const feelsLike = Math.floor(Number(main?.feels_like) - 273);
   const humidity = main?.humidity;
+  console.log(weatherData);
 
-  return (
-    <div className="wrapper">
-      <header>
-        <i className='bx bx-left-arrow-alt' onClick={() => navigate("/")} />Weather App
-      </header>
-      <section className="weather-part">
-        {img && <img src={img} alt="Weather Icon" />}
-        <div className="temp">
-          <span className="numb">{temperature}</span>
-          <span className="deg">°</span>C
-        </div>
-        <div className="weather">{weatherData?.weather[0]?.description}</div>
-        <div className="location">
-          <i className="bx bx-map" />
-          <span>{name}, {sys?.country}</span>
-        </div>
-        <div className="bottom-details">
-          <div className="column feels">
-            <i className="bx bxs-thermometer" />
-            <div className="details">
-              <div className="temp">
-                <span className="numb-2">{feelsLike}</span>
-                <span className="deg">°</span>C
+ if (!weatherData) {
+    return
+  }
+    return (
+      <div className="wrapper">
+        <header>
+          <i className='bx bx-left-arrow-alt' onClick={() => navigate("/")} />Weather App
+        </header>
+        <section className="weather-part">
+          <img src={img} alt="Weather Icon" />
+          <div className="temp">
+            <span className="numb">{temperature}</span>
+            <span className="deg">°</span>C
+          </div>
+          {weatherData?.weather && <div className="weather">{weatherData?.weather[0]?.description}</div>}
+          <div className="location">
+            <i className="bx bx-map" />
+            <span>{name}, {sys?.country}</span>
+          </div>
+          <div className="bottom-details">
+            <div className="column feels">
+              <i className="bx bxs-thermometer" />
+              <div className="details">
+                <div className="temp">
+                  <span className="numb-2">{feelsLike}</span>
+                  <span className="deg">°</span>C
+                </div>
+                <p>Feels like</p>
               </div>
-              <p>Feels like</p>
+            </div>
+            <div className="column humidity">
+              <i className="bx bxs-droplet-half" />
+              <div className="details">
+                <span>{humidity}%</span>
+                <p>Humidity</p>
+              </div>
             </div>
           </div>
-          <div className="column humidity">
-            <i className="bx bxs-droplet-half" />
-            <div className="details">
-              <span>{humidity}%</span>
-              <p>Humidity</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-};
+        </section>
+      </div>
+    );
+  };
 
 export default Card;

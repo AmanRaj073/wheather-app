@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
 import axios from "axios";
-
 const SearchContext = createContext();
 
 export function useGlobalContext() {
@@ -9,9 +8,8 @@ export function useGlobalContext() {
 
 export function SearchProvider({ children }) {
   const [error, setError] = useState("");
-  const [weatherData, setWeatherData] = useState([]);
+  const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState("");
-
   const resData = async (searchValue) => {
     try {
       let apiKey = "1638e4f180e75a092aabc98159c5a093";
